@@ -1,21 +1,23 @@
 package com.example.x.memo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.OrientationHelper;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.x.memo.Base.MemoData;
 import com.example.x.memo.Base.MemoList;
+import com.example.x.memo.Utils.XPermissionUtil;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.memo_Rec);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        layoutManager.setOrientation(OrientationHelper.VERTICAL);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
 
         memoDataList=MemoList.get(MainActivity.this).getMemos();
 
@@ -65,12 +67,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                MemoData memoData = new MemoData();
-                MemoList.get(MainActivity.this).addMemo(memoData);
-                String i = memoData.getmId();
-                Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                intent.putExtra("edit", i);
-                MainActivity.this.startActivity(intent);
+                if(XPermissionUtil.check(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE))
+                {
+                    MemoData memoData = new MemoData();
+                    MemoList.get(MainActivity.this).addMemo(memoData);
+                    String i = memoData.getmId();
+                    Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                    intent.putExtra("edit", i);
+                    MainActivity.this.startActivity(intent);
+                }
+
             }
         });
 
@@ -81,7 +87,10 @@ public class MainActivity extends AppCompatActivity {
             initMemo();
         }
         */
-        checkPermission();
+        //checkPermission();
+
+        XPermissionUtil.init(Permissions);
+        XPermissionUtil.check(MainActivity.this);
         initMemo();
 
         memoAdapter.setListener(new MemoAdapter.onclickListener() {

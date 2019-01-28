@@ -21,11 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditActivity" />
         <activity
             android:name=".LockActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-        <activity android:name=".HideActivity"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".HideActivity" />
+        <activity android:name=".EditActivity"></activity>
     </application>
 
 </manifest>
