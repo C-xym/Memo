@@ -1,110 +1,57 @@
 package com.example.x.memo.Base;
 
+import android.content.SharedPreferences;
+
+import com.example.x.memo.MainActivity;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MemoData {
 
     private static int ID=0;
 
-    private String mId;
-    private String mContext;
-    private String mDate;
-    private String mPicPath;
-    private String mVicPath;
-    private String mHide;
+    //写入数据库
+    private int mId;
+    private String mDate;//2019-01-01 00:00
+    private String mFilePath;
+    private boolean mHide;
 
-    public String getmContext() {
-        return mContext;
-    }
-
-    public void setmContext(String mContext) {
-        this.mContext = mContext;
-    }
-
-    public String getmId() {
-        return mId;
-    }
-
-    public void setmId(String mId) {
-        this.mId = mId;
-    }
-
-    public String getmDate() {
-        return mDate;
-    }
-
-    public void setmDate(String mDate) {
-        this.mDate = mDate;
-    }
-
-    public String getmPicPath() {
-        return mPicPath;
-    }
-
-    public void setmPicPath(String mPicPath) {
-        this.mPicPath = mPicPath;
-        this.VIC=true;
-    }
-
-    public String getmVicPath() {
-        return mVicPath;
-    }
-
-    public void setmVicPath(String mVicPath) {
-        this.mVicPath = mVicPath;
-        this.PIC=true;
-    }
-
-    public String getmHide() {
-        return mHide;
-    }
-
-    public void setmHide(String mHide) {
-        this.mHide = mHide;
-    }
+    private ArrayList<String> mContext;
+    private ArrayList<String> mPicPath;
+    private ArrayList<String> mVicPath;
 
     private boolean PIC;
     private boolean VIC;
 
     public MemoData(){
 
-        if(ID==0)ID=MemoList.getNum();
-
-        this.mContext="";
-        this.mId=ID+"";
+        this.mId=ID;
         ID++;
+
         this.mDate=new Date().get();
 
-        this.mPicPath="";
-        this.mVicPath="";
-        this.mHide="false";
+        this.mHide=false;
         this.PIC=false;
         this.VIC=false;
-    }
-    public MemoData(String id,String text,String date,String pic,String vic,String hide){
-        this.mId=id;
-        this.mContext=text;
-        this.mDate=date;
-        this.mPicPath=pic;
-        this.mVicPath=vic;
-        this.mHide=hide;
 
-        if(pic.equals("")){
-            this.PIC=false;
+    }
+    public MemoData(int id,String date,String filepath,int hide){
+        this.mId=id;
+        this.mDate=date;
+        this.mFilePath=filepath;
+        if(hide==0){
+            mHide=false;
+        }else {
+            mHide=true;
         }
-        else{
-            this.PIC=true;
-        }
-        if(vic.equals("")){
-            this.VIC=false;
-        }
-        else {
-            this.VIC=true;
-        }
+
     }
 
     public String getSortContext(){
-        String sContext;
+        String sContext="";
+       /*
+
         if(mContext.length()>20)
         {
             sContext=mContext.substring(0,20);
@@ -113,8 +60,48 @@ public class MemoData {
         else {
             sContext=mContext;
         }
+        */
         return sContext;
     }
+
+    public int getmId() {
+        return mId;
+    }
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
+
+    public String getmDate() {
+        return mDate;
+    }
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
+
+    public String getmFilePath() {
+        return mFilePath;
+    }
+    public void setmFilePath(String mFilePath) {
+        this.mFilePath = mFilePath;
+    }
+
+    public int getmHide() {
+        if(mHide){
+            return 1;
+        }
+        return 0;
+    }
+    public void setmHide(boolean mHide) {
+        this.mHide = mHide;
+    }
+
+    public static void setID(int id){
+        MemoData.ID=id;
+    }//应用开始前初始化
+    public static int getID(){
+        return ID;
+    }//应用结束前保存
+
     public String getDateF(){
         String s=mDate.substring(0,10);
         return s;
@@ -127,7 +114,6 @@ public class MemoData {
     public boolean isPIC(){
         return PIC;
     }
-
     public boolean isVIC() {
         return VIC;
     }

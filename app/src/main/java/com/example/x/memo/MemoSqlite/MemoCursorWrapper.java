@@ -17,14 +17,12 @@ public class MemoCursorWrapper extends CursorWrapper {
 
     public MemoData getMemo(){
 
-        String id= getString(getColumnIndex(MemoDbSchema.MemoTable.Cols.ID));
-        String context=getString(getColumnIndex(MemoDbSchema.MemoTable.Cols.CONTEXT));
+        int id= getInt(getColumnIndex(MemoDbSchema.MemoTable.Cols.ID));
         String date=getString(getColumnIndex(MemoDbSchema.MemoTable.Cols.DATE));
-        String picpath=getString(getColumnIndex(MemoDbSchema.MemoTable.Cols.PICPATH));
-        String vicpath=getString(getColumnIndex(MemoDbSchema.MemoTable.Cols.VICPATH));
-        String hide=getString(getColumnIndex(MemoDbSchema.MemoTable.Cols.HIDE));
+        String path=getString(getColumnIndex(MemoDbSchema.MemoTable.Cols.PATH));
+        int hide=getInt(getColumnIndex(MemoDbSchema.MemoTable.Cols.HIDE));
 
-        MemoData memoData=new MemoData(id,context,date,picpath,vicpath,hide);
+        MemoData memoData=new MemoData(id,date,path,hide);
         return memoData;
     }
 }

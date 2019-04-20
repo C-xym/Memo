@@ -18,12 +18,10 @@ public class MemoBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table "+MemoTable.NAME+ "("+"_id integer primary key autoincrement, "+
-                MemoTable.Cols.ID+", "+
-                MemoTable.Cols.CONTEXT+", "+
+                MemoTable.Cols.ID+" integer, "+
                 MemoTable.Cols.DATE+", "+
-                MemoTable.Cols.PICPATH+", "+
-                MemoTable.Cols.VICPATH+", "+
-                MemoTable.Cols.HIDE+
+                MemoTable.Cols.PATH+", "+
+                MemoTable.Cols.HIDE+" integer"+
                 ")"
         );
     }

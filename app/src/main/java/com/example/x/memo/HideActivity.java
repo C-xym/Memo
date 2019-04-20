@@ -11,8 +11,6 @@ import android.view.View;
 
 import com.example.x.memo.Base.MemoData;
 import com.example.x.memo.Base.MemoList;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
-import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class HideActivity extends AppCompatActivity {
 
     public List<MemoData> memoDataList;
     private MemoAdapter memoAdapter;
-    private SwipeMenuRecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +29,10 @@ public class HideActivity extends AppCompatActivity {
         View decor = this.getWindow().getDecorView();
         decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);//View.SYSTEM_UI_FLAG_LAYOUT_STABLE   View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
-        recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.memo_Rec);
+        recyclerView = (RecyclerView) findViewById(R.id.memo_Rec);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        layoutManager.setOrientation(OrientationHelper.VERTICAL);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -42,9 +40,9 @@ public class HideActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 MemoData memoData = new MemoData();
-                memoData.setmHide("true");
+                memoData.setmHide(true);
                 MemoList.get(HideActivity.this).addMemo(memoData);
-                String i = memoData.getmId();
+                int i = memoData.getmId();
                 Intent intent = new Intent(HideActivity.this, EditActivity.class);
                 intent.putExtra("edit", i);
                 HideActivity.this.startActivity(intent);
@@ -53,34 +51,7 @@ public class HideActivity extends AppCompatActivity {
 
         initMemo();
 
-        memoAdapter.setListener(new MemoAdapter.onclickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                String i = memoAdapter.getItemSid(position);
-                Intent intent = new Intent(HideActivity.this, EditActivity.class);
-                intent.putExtra("edit", i);
-                HideActivity.this.startActivity(intent);
-            }
-        });
 
-        recyclerView.setItemViewSwipeEnabled(true);
-        recyclerView.setOnItemMoveListener(new OnItemMoveListener() {
-            @Override
-            public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
-                return false;
-            }
-
-            @Override
-            public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
-                // 此方法在Item在侧滑删除时被调用。
-                int position = srcHolder.getAdapterPosition();
-                String s=memoAdapter.getItemSid(position);
-                MemoList.get(HideActivity.this).deleteMemo(s);
-                memoDataList=MemoList.get(HideActivity.this).getMemos("true");
-                memoAdapter.setMemoDataList(memoDataList);
-                memoAdapter.notifyItemRemoved(position);
-            }
-        });
 
 
     }
@@ -92,7 +63,7 @@ public class HideActivity extends AppCompatActivity {
 
     private void initMemo() {
 
-        memoDataList=MemoList.get(HideActivity.this).getMemos("true");
+        memoDataList=MemoList.get(HideActivity.this).getMemos(1);
         if(memoAdapter==null)
         {
             memoAdapter=new MemoAdapter(memoDataList);

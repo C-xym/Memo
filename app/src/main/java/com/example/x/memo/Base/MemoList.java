@@ -15,7 +15,6 @@ import java.util.List;
 public class MemoList {
 
     private static MemoList sMemoList;
-    private static int num;
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
@@ -45,14 +44,13 @@ public class MemoList {
         }finally {
             cursor.close();
         }
-        num=memoDatas.size();
         return memoDatas;
     }
-    public List<MemoData> getMemos(String hide){
+    public List<MemoData> getMemos(int hide){
 
         List<MemoData> memoDatas=new ArrayList<>();
         MemoCursorWrapper cursor=queryMemo(MemoDbSchema.MemoTable.Cols.HIDE+"=?",
-                new String[]{hide});
+                new String[]{String.valueOf(hide)});
         try{
             cursor.moveToFirst();
             while (!cursor.isAfterLast()){
@@ -65,41 +63,40 @@ public class MemoList {
         return memoDatas;
     }
 
-    public MemoData getMemo(String id){
+    public MemoData getMemo(int id){
 
+        MemoData memoData=null;
         MemoCursorWrapper cursor=queryMemo(
                 MemoDbSchema.MemoTable.Cols.ID+"=?",
-                new String[]{id}
+                new String[]{String.valueOf(id)}
         );
         try {
-            if(cursor.getCount()==0){
-                return null;
+            if(cursor.getCount()!=0){
+                cursor.moveToFirst();
+                memoData=cursor.getMemo();
             }
-            cursor.moveToFirst();
-            return cursor.getMemo();
         }finally {
             cursor.close();
         }
+        return memoData;
     }
 
     public void updateMemo(MemoData memoData){
-        String id=memoData.getmId();
+        int id=memoData.getmId();
         ContentValues values=getContentValues(memoData);
-        mDatabase.update(MemoDbSchema.MemoTable.NAME,values, MemoDbSchema.MemoTable.Cols.ID+"=?",new String[]{id});
+        mDatabase.update(MemoDbSchema.MemoTable.NAME,values, MemoDbSchema.MemoTable.Cols.ID+"=?",new String[]{String.valueOf(id)});
     }
 
-    public void deleteMemo(String id){
-        mDatabase.delete(MemoDbSchema.MemoTable.NAME,MemoDbSchema.MemoTable.Cols.ID+"=?",new String[]{id});
+    public void deleteMemo(int id){
+        mDatabase.delete(MemoDbSchema.MemoTable.NAME,MemoDbSchema.MemoTable.Cols.ID+"=?",new String[]{String.valueOf(id)});
     }
 
     private static ContentValues getContentValues(MemoData memoData){
         ContentValues values=new ContentValues();
         values.put(MemoDbSchema.MemoTable.Cols.ID ,memoData.getmId());
-        values.put(MemoDbSchema.MemoTable.Cols.CONTEXT,memoData.getmContext());
         values.put(MemoDbSchema.MemoTable.Cols.DATE ,memoData.getmDate());
+        values.put(MemoDbSchema.MemoTable.Cols.PATH ,memoData.getmFilePath());
         values.put(MemoDbSchema.MemoTable.Cols.HIDE,memoData.getmHide());
-        values.put(MemoDbSchema.MemoTable.Cols.PICPATH ,memoData.getmPicPath());
-        values.put(MemoDbSchema.MemoTable.Cols.VICPATH,memoData.getmVicPath());
         return values;
     }
 
@@ -120,9 +117,5 @@ public class MemoList {
 
         ContentValues values=getContentValues(memoData);
         mDatabase.insert(MemoDbSchema.MemoTable.NAME,null,values);
-    }
-
-    public static int getNum() {
-        return num;
     }
 }

@@ -1,16 +1,17 @@
 package com.example.x.memo;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.x.memo.Base.MemoData;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.List;
 
-public class MemoAdapter extends SwipeMenuRecyclerView.Adapter<memoHolder> {
+public class MemoAdapter extends RecyclerView.Adapter<memoHolder> {
 
     private List<MemoData> memoDataList;
 
@@ -53,9 +54,6 @@ public class MemoAdapter extends SwipeMenuRecyclerView.Adapter<memoHolder> {
         return 0;
     }
 
-    public String getItemSid(int pos){
-        return memoDataList.get(pos).getmId();
-    }
 
     @Override
     public int getItemCount() {

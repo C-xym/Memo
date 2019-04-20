@@ -5,9 +5,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.x.memo.Base.MemoData;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
-public class memoHolder extends SwipeMenuRecyclerView.ViewHolder{
+import androidx.recyclerview.widget.RecyclerView;
+
+public class memoHolder extends RecyclerView.ViewHolder{
 
     private MemoData mData;
 
@@ -24,8 +25,7 @@ public class memoHolder extends SwipeMenuRecyclerView.ViewHolder{
         mDate=(TextView)itemView.findViewById(R.id.item_date);
         pic=(ImageView)itemView.findViewById(R.id.item_photo);
         vic=(ImageView)itemView.findViewById(R.id.item_voice);
-        pic.setVisibility(View.VISIBLE);
-        vic.setVisibility(View.VISIBLE);
+
     }
 
     public void bind(final MemoData memoData){
@@ -33,16 +33,13 @@ public class memoHolder extends SwipeMenuRecyclerView.ViewHolder{
         mData=memoData;
         mContext.setText(mData.getSortContext());
         mDate.setText(mData.getmDate());
-        if(!memoData.isPIC())
-        {
+        if(!memoData.isPIC()) {
             pic.setVisibility(View.INVISIBLE);
         }
-        else
-        {
+        else {
             pic.setVisibility(View.VISIBLE);
         }
-        if(!memoData.isVIC())
-        {
+        if(!memoData.isVIC()) {
             vic.setVisibility(View.INVISIBLE);
         }
         else {
